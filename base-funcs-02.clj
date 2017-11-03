@@ -23,3 +23,11 @@
 
 ; and remove the index
 (def my-lst-drpd-fin (map second my-lst-drpd))
+
+; another option is to use keep-indexed
+; the function it takes gets index + item
+; whatever it returns will be collected in a list
+(keep-indexed (fn [idx itm]
+                (if (not= 2 (rem idx 3))
+                  itm))
+              my-lst)
