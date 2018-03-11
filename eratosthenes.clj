@@ -21,6 +21,21 @@
 (range 3 (Math/sqrt 200) 2)
 
 
+; transducer stuff https://clojure.org/reference/transducers
+(def transducer1 (map #(+ % 1)))
+(def transducer2 (filter #(< % 5)))
+
+(def transducer-comb (comp transducer1 transducer2)) ;mapping before filtering
+
+(def coll (range 10))
+
+(eduction transducer-comb coll)
+
+(into [] transducer1 coll)
+(into [] transducer-comb coll)
+
+
+
 (defn primes-to
   "Computes lazy sequence of prime numbers up to a given number using sieve of Eratosthenes"
   [n]
