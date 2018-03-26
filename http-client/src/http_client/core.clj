@@ -9,8 +9,8 @@
 
 
 (defn -main []
-  (let [dta (client/get "http://httpbin.org/ip")]
-  	(parse-string "{:request-time 567}")))
+  (let [dta (:body (client/get "http://httpbin.org/ip"))]
+  	(println (parse-string dta)))); "{:request-time 567}")))
   		;(println dta)));(parse-string dta))))
 
 ; (parse-string "{\"foo\":\"bar\"}")
