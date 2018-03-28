@@ -6,7 +6,8 @@
 
 ; if a lein repl is executed, we seem to be in the http-client.core namespace
 ; and can execute commands (including the ones from the imported libraries)
-; changing via namespaces works via (ns namespace):
+; printing the current namespace works via (ns-name *ns*) , *ns* denotes the current namespace
+; changing namespaces works via (ns namespace):
 ; (ns user) -> here we cannot call (client/get "http://httpbin.org/ip") because the lib is not importe din this namespace
 ; (ns http-client.core) -> here we can call (client/get ...) because we import the lib into this namespace
 ; when we edit the file, we can reload it into the REPL via
