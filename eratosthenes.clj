@@ -89,5 +89,27 @@
 (primes-v4 20)
 
 
+; the latest and greatest...
+(defn my-contains? [val lst] ; own function which checks whether val is contained in lst -the std function contains? does NOT work
+  (if (some #(= val %) lst)
+    true
+    false))
 
+(my-contains? 4 '(1 2 3))
+(my-contains? 4 '(1 2 3 5 4))
 
+(defn invert-set [N s]  ; remove the values s from (range 1 N)
+  (let [composites (set s)]
+    (sort (clojure.set/difference (set (range 1 N)) composites))))
+
+(invert-set 10 '(1 3 5))
+
+(defn p-v5 [N]
+  (loop [i 2 composites (range 2 N 2)]
+    (if (my-contains? i composites) ; if i is in composites...
+      (recur (inc i) composites)    ; ... increment i and start again
+      (if (> i N) ; are we finished?
+        (invert-set N composites)    ; yes -> invert the set to get primes
+        (recur (inc i) (concat composites (range (* 2 i) N i))))))) ; not finished: start again, increment i and add to composites list
+
+(p-v5 20)
