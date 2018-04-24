@@ -31,5 +31,17 @@
 
 (three-n-plus-one 15)
 
+; make a transient vector filled with N zeros
+(defn make-transient-vec [N]
+  (transient (vec (repeat N 0))))
+
+; using assoc! we can set the val of a transient vector at index
+(defn my-seq [N]
+  (loop [i 0 sq (make-transient-vec N)]
+    (if (< i N)
+      (recur (inc i) (assoc! sq i (* i i))) ; not done -> increment loop counter, set vector at position i with value i*i
+      (persistent! sq)))) ; done -> make persistent and return
+
+(my-seq 10)
 
 
