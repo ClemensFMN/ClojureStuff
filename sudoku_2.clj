@@ -147,9 +147,14 @@
 (def cp-complete (constraint-prop test-puzzle-map))
 
 
+(defn puzzle-solved?
+  "check whether a puzle is solved"
+  [puzzle]
+  (every?
+    #(= 1 %)
+    (map #(count (val %)) puzzle)))
 
-
-
+(puzzle-solved? test-puzzle-map)
 
 
 (def almost-complete-puzzle
