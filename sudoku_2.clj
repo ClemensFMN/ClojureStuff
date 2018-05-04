@@ -2,7 +2,7 @@
 ; like in sudoku_1, we model the board as vector and not as map
 ; this allows simpler debugging as a map is not sorted
 
-
+; solvable via CP alone
 (def test-puzzle
   [0 0 3 0 2 0 6 0 0
    9 0 0 3 0 5 0 0 1
@@ -13,6 +13,19 @@
    0 0 2 6 0 9 5 0 0
    8 0 0 2 0 3 0 0 9
    0 0 5 0 1 0 3 0 0])
+
+; not solvable via CP alone...
+(def test-puzzle-2
+  [0 0 0 0 0 0 6 0 0
+   0 0 0 3 0 5 0 0 1
+   0 0 1 8 0 6 4 0 0
+   0 0 8 1 0 2 9 0 0
+   7 0 0 0 0 0 0 0 8
+   0 0 6 7 0 8 2 0 0
+   0 0 2 6 0 9 5 0 0
+   8 0 0 2 0 3 0 0 9
+   0 0 5 0 1 0 3 0 0])
+
 
 
 (def all-puzzle-coords
@@ -141,29 +154,46 @@
   (loop [i 0 pzl puzzle]
     (let [new-pzl (constraint-prop-round pzl)]
       (if (= pzl new-pzl)
-        {:sol new-pzl :iters i}
+        ; {:sol new-pzl :iters i}
+        new-pzl
       (recur (inc i) new-pzl)))))
 
 (def cp-complete (constraint-prop test-puzzle-map))
 
-
 (defn puzzle-solved?
-  "check whether a puzle is solved"
+  "check whether a puzle is solved; three outcomes: :done, :ambiguous (at least one cell not fix), :stuck (no options in at least one cell)"
   [puzzle]
-  (every?
-    #(= 1 %)
-    (map #(count (val %)) puzzle)))
+  (cond
+    (every?
+      #(= 1 %)
+      (map #(count (val %)) puzzle)) :done
+    (not-any?
+      #(= 0 %)
+      (map #(count (val %)) puzzle)) :ambiguous
+    (not-any?
+      #(> 1 %)
+      (map #(count (val %)) puzzle)) :stuck))
 
 (puzzle-solved? test-puzzle-map)
+;(puzzle-solved? (cp-complete :sol))
+(puzzle-solved? cp-complete)
+
+(def test-puzzle-map-2 (convert-puzzle-to-map test-puzzle-2))
+(puzzle-solved? (constraint-prop test-puzzle-map-2))
+
+(defn solve
+  "the master solve function"
+  [puzzle]
+  ; a bit tired at the moment
+  ; basicaly, run a round of CP
+  ; then check for the three cases:
+  ; :done -> done
+  ; :stuck -> do nothing
+  ; :ambiguous -> go over all cells with > 1 values
+  ;                  go over all values
+  ;                     call solve
+
+  )
 
 
-(def almost-complete-puzzle
-  [0 0 3 9 2 1 6 5 7
-   9 6 7 3 4 5 8 2 1
-   2 5 1 8 7 6 4 9 3
-   5 4 8 1 3 2 9 7 6
-   7 2 9 5 6 4 1 3 8
-   1 3 6 7 9 8 2 4 5
-   3 7 2 6 8 9 5 1 4
-   8 1 4 2 5 3 7 6 9
-   6 9 5 4 1 7 3 8 2])
+
