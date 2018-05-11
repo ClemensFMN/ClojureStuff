@@ -25,3 +25,22 @@
 
 (time (fib2 30))
 
+
+(defn -fib-list-1-helper 
+  "helper func: take a list and return the sum of the first two elements"
+  [acc]
+  (+ (first acc) (first (rest acc))))
+
+(-fib-list-1-helper [2 1 1])
+
+(defn fib-list-1 
+  "return a list of the first N Fibonacci numbers (N>1)"
+  [N]
+  (reverse
+    (reduce (fn [acc x] ; append to the list using reduce
+      (cons (-fib-list-1-helper acc) acc)) ; we calc the next fib number
+    [1 1] ; init with a_0=a_1=1
+    (range (- N 2))))) ; and use a "dummy sequence" of length N-2 to get the right number of elements
+  
+  
+  (fib-list-1 10)
