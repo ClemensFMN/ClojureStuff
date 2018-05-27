@@ -18,6 +18,30 @@
 
 (findi 3 my-lst)
 
+(defn findip [f coll]
+  "return all indices of collection elements where f (accepting index and value) returns true"
+  (for [
+        [i v] (my-zip coll) :when (f i v)
+        ]
+    i))
+
+; same as above
+(findip (fn [i v] (= v 3) ) my-lst)
+(findip (fn [i v] (> v 2) ) my-lst)
+
+(defn findivp [f coll]
+  "return all indices and values of collection elements where f (accepting index and value) returns true"
+  (for [
+        [i v] (my-zip coll) :when (f i v)
+        ]
+    [i v]))
+
+; same as above
+(findivp (fn [i v] (= v 3) ) my-lst)
+(findivp (fn [i v] (> v 2) ) my-lst)
+
+
+
 ; return the keys of e in a map
 (defn findim [e coll]
   (for [[i v] (seq coll) :when (= e v)] i))
