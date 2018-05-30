@@ -15,10 +15,10 @@
   "takes a complete filestring and parses it into a map :left :right"
   [s]
   (for [itm s]
-    (let [[lft rght] (clojure.string/split itm #"<->")] ; split at <->
-      (let [rght-split (clojure.string/split rght #",")] ; split the right part at ,
-        (let [rght-split-prsd (map trim-and-parse rght-split)] ; clean-up the right side
-          {:left (trim-and-parse lft) :right rght-split-prsd}))))) ; and build a map
+    (let [[lft rght] (clojure.string/split itm #"<->") ; split at <->
+          rght-split (clojure.string/split rght #",") ; split the right part at ,
+          rght-split-prsd (map trim-and-parse rght-split)] ; clean-up the right side
+          {:left (trim-and-parse lft) :right rght-split-prsd}))) ; and build a map
 
 
 (prcs-inp inp-string)
