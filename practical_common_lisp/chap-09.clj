@@ -12,7 +12,7 @@
 ; moves the tedious duplication somewhere else, but does not help otherwise
 (report-result (= 3 (+ 1 2)) '(= 3 (+ 1 2)))
 
-; let's define a macro which handels the duplication
+; let's define a macro which handles the duplication
 (defmacro check [form]
   `(report-result ~form '~form))
 
@@ -36,4 +36,13 @@
 
 (check-v2 (= 3 (+1 2 )) (= 6 (* 2 3)))
 
+; neither does this work...
+(defmacro check-v3 [& forms]
+  `(do
+    (loop [frms ~forms res '()]
+      (recur (rest frms (conj res (first frms)))))))
+
+(macroexpand '(check-v3 (= 3 (+1 2 )) (= 6 (* 2 3))))
+
+(check-v3 (= 3 (+1 2 )) (= 6 (* 2 3)))
 
