@@ -22,3 +22,19 @@
 
 ; calling a static method
 (java.lang.Integer/valueOf "5")
+
+
+(let [ar (java.util.ArrayList.)]
+  (.add ar 3)
+  (.add ar 5)
+  (println (.contains ar 3))
+  ar)
+
+(let [ar (java.util.ArrayList.)]
+  (loop [i 0]
+    (println i)
+    (if (> i 10)
+      (nil))
+    (recur (inc i))))
+
+
