@@ -46,3 +46,15 @@
 
 (check-v3 (= 3 (+1 2 )) (= 6 (* 2 3)))
 
+
+; taken from here: https://github.com/stuarthalloway/practical-cl-clojure/blob/master/src/pcl/chap_09.clj
+(defmacro check-v4 [& forms]
+  `(do
+     ~@(map (fn [f] `(report-result ~f '~f))  forms)))
+
+(defn test-rem []
+  (check-v4 (= (rem 10 3) 1)
+   (= (rem 6 2) 0)
+   (= (rem 7 4) 3)))
+
+
