@@ -25,7 +25,10 @@ Three conditions:
   [x lst]
   ( cond (empty? lst) '()
          (= (first lst) x) (rest lst)
-         :else (rember x (rest lst))))
+   :else (cons (first lst)
+               (rember x (rest lst)))))
+
+
 
 
 (defn multi-rember
@@ -56,3 +59,24 @@ Three conditions:
                                          (multiinsertL old new (rest lst))))
          :else (cons (first lst)
                      (multiinsertL old new (rest lst)))))
+
+
+(defn subst [old new lst]
+  (cond (empty? lst) '()
+        (= (first lst) old) (cons new (rest lst))
+        :else (cons (first lst)
+                    (subst old new (rest lst)))))
+
+(subst 1 10 [1,2,3,1])
+(subst 2 10 [1,2,3,1])
+
+(defn multi-subst [old new lst]
+  (cond (empty? lst) '()
+        (= (first lst) old) (cons new (multi-subst old new (rest lst)))
+        :else (cons (first lst)
+                    (subst old new (rest lst)))))
+
+(multi-subst 1 10 [1,2,3,1])
+(multi-subst 2 10 [1,2,3,1])
+; CLojure stdlib solution
+(replace {1 10} [1,2,3,1])
