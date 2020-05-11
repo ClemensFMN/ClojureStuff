@@ -45,7 +45,14 @@
   (flatten ; and flatten the thing afterwards
    (map rep r))) ; repeat each element of the RLE lst
 
+; instead of the nested, inside-out thing, we can use the ->> macro
+(defn dec-rle2 [r]
+  (->> rle-res
+       (map rep)
+       flatten))
+
 (dec-rle rle-res)
+(dec-rle2 rle-res)
 
 ; ========================
 
