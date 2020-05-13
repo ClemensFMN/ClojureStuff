@@ -1,40 +1,48 @@
+; Interop with Java
+
+;; probably the simplest task is to call static methods
 (.toUpperCase "By Bluebeard's bananas!")
 
 (java.lang.Math/abs -3)
 (java.lang.Math/sin 1.2)
+(java.lang.Integer/valueOf "5")
 
-; use a let to hold a java object
+
+;; create a new class and use it afterwards (seems that java.util stuff is already on the classpath and can be used
+(def rnd (new java.util.Random))
+(. rnd nextInt)
+
+;; we can pack the whole stuff into a let and execute it in a do block
+(let [rnd (new java.util.Random)]
+  (do
+    (println (. rnd nextInt))
+    (println (. rnd nextInt))))
+
+;; use a let to hold a java object
 (let [stack (java.util.Stack.)]
-  (.push stack "Latest episode of Game of Thrones, ho!")
-  (.push stack "dkdklgj")
-;  (.empty stack)) ; using java methods requires a dot before the method
-;  (.pop stack))
-  stack)
+  (do
+    (.push stack "Latest episode of Game of Thrones, ho!")
+    (.push stack "dkdklgj"))
+    stack) ; return stack
 
-; using the doto macro to operate on a java object
+(let [ar (java.util.ArrayList.)]
+  (do
+    (.add ar 3)
+    (.add ar 5)
+    (println (.contains ar 3)))
+  ar)
+
+
+;; using the doto macro: It creates an (anonymous) java object, executes all following calls in a do environment on this object, and returnx the object
 (doto (java.util.Stack.)
   (.push "Latest episode of Game of Thrones, ho!")
   (.push "Whoops, I meant 'Land, ho!'")
   (.pop))
 
-(let [my-s (java.lang.String. "Hello")]
-      (.length my-s))
+(doto (java.util.ArrayList.)
+  (.add 3)
+  (.add 5)
+  (.contains 3))
 
-; calling a static method
-(java.lang.Integer/valueOf "5")
-
-
-(let [ar (java.util.ArrayList.)]
-  (.add ar 3)
-  (.add ar 5)
-  (println (.contains ar 3))
-  ar)
-
-(let [ar (java.util.ArrayList.)]
-  (loop [i 0]
-    (println i)
-    (if (> i 10)
-      (nil))
-    (recur (inc i))))
 
 
