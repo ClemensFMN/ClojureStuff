@@ -27,6 +27,7 @@
 
 ; same as above
 (findip (fn [i v] (= v 3) ) my-lst)
+(findip #(= %2 3) my-lst) ; using anonymuous function instead of the fn construct
 (findip (fn [i v] (> v 2) ) my-lst)
 
 (defn findivp [f coll]
@@ -49,6 +50,9 @@
 (def my-map {:a 3 :c 2 :f 3 :z 4})
 (findim 3 my-map)
 
+
+;=================================================
+
 ; achieving the same using the clojure function keep-indexed
 ; keep-indexed f coll: Returns a lazy sequence of the non-nil results of (f index item)
 (defn positions [e coll]
@@ -58,3 +62,18 @@
                 coll))
 
 (positions 3 my-lst)
+
+(defn find-ind-val [f coll]
+  (keep-indexed #(if (f %1 %2) %1) coll))
+
+(find-ind-val #(= %2 3) my-lst)
+
+
+(defn find-ind-val-2 [f coll]
+  (keep-indexed #(if (f %1 %2)
+                   %1)
+                coll))
+
+(find-ind-val-2 (fn[i v] (= v 3)) my-lst)
+(find-ind-val-2 (fn[i v] (> v 3)) my-lst)
+(find-ind-val-2 (fn[i v] (< i 3)) my-lst)
