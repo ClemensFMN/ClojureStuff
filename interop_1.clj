@@ -41,8 +41,8 @@
 
 (doto (java.util.ArrayList.)
   (.add 3)
-  (.add 5)
-  (.contains 3))
+  (.add 5))
+
 
 
 
